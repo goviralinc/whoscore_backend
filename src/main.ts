@@ -13,7 +13,7 @@ const logStream = fs.createWriteStream('api.log', {
 async function bootstrap() {
   const logger = new Logger();
   const globalPrefix = process.env.API_VERSION;
-  const is_debug = process.env.DEBUG;
+  //const is_debug = process.env.DEBUG;
   const docPath = `${globalPrefix}/docs`;
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix(globalPrefix);
