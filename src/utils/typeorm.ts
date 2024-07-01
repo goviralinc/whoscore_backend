@@ -8,11 +8,11 @@ let config = {};
 if (process.env.NODE_ENV == 'production') {
   config = {
     type: 'postgres',
-    host: `${process.env.PGHOST}`,
+    host: `${process.env.NEONDB_HOST}`,
     port: `${process.env.POSTGRES_PORT}`,
-    username: `${process.env.PGUSER}`,
-    password: `${process.env.PGPASSWORD}`,
-    database: `${process.env.PGDATABASE}`,
+    username: `${process.env.NEONDB_USER}`,
+    password: `${process.env.NEONDB_PASSWORD}`,
+    database: `${process.env.NEONDB_NAME}`,
     autoLoadEntities: true,
     entities: ['dist/**/*.entity{.ts,.js}'],
     migrations: ['dist/migrations/*{.ts,.js}'],
