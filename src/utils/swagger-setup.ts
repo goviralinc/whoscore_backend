@@ -11,7 +11,7 @@ export class SwaggerSetup {
       .setTitle('Whoscore documentation')
       .setDescription('Whoscore documentation')
       .addServer('http://localhost:3000', 'Local Server') // You can add multiple servers
-      //.addServer('https://apidev.Whoscore.ng', 'Test Server') // You can add multiple servers
+      .addServer('whoscore-backend-h8y0.onrender.com', 'Test Server') // You can add multiple servers
       //.addServer('https://api.Whoscore.ng', 'Production Server') // Set the addServer value
       .addBearerAuth()
       .setVersion('1.0')
