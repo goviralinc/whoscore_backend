@@ -3,6 +3,9 @@ import { CreateTicketIdDto } from './dto/create-ticket-id.dto';
 import { UpdateTicketIdDto } from './dto/update-ticket-id.dto';
 import { GetTicketInfoDto } from './dto/ticket-id.dto';
 import { crawlSportyTicket } from './crawlers/sporty';
+import { crawlBet9jaTicket } from './crawlers/bet9ja';
+import { crawlBetwayTicket } from './crawlers/betway';
+import { crawlBetkingTicket } from './crawlers/betking';
 
 @Injectable()
 export class TicketIdService {
@@ -22,17 +25,17 @@ export class TicketIdService {
 
       case 'bet9ja':
         console.log(betPlatform);
-        ticketInfo = betPlatform;
+        ticketInfo = await crawlBet9jaTicket(ticketId);
         break;
 
       case 'betway':
         console.log(betPlatform);
-        ticketInfo = betPlatform;
+        ticketInfo = await crawlBetwayTicket(ticketId);
         break;
 
       case 'betking':
         console.log(betPlatform);
-        ticketInfo = betPlatform;
+        ticketInfo = await crawlBetkingTicket(ticketId);
         break;
 
       case 'merrybet':

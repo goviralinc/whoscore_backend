@@ -1,5 +1,6 @@
 // sporty.ts
 import puppeteer, { Browser, Page } from 'puppeteer';
+import puppeteerConfig from 'puppeteer.config';
 
 export const crawlSportyTicket = async (ticketId: string): Promise<any> => {
   const apiUrl = `https://www.sportybet.com/api/ng/orders/share/${ticketId}`;
@@ -7,7 +8,7 @@ export const crawlSportyTicket = async (ticketId: string): Promise<any> => {
   try {
     const browser: Browser = await puppeteer.launch({
       headless: true,
-      executablePath: '/usr/bin/google-chrome',
+      executablePath: puppeteerConfig.executablePath,
       defaultViewport: null,
       args: [
         '--no-sandbox',
