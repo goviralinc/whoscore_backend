@@ -1,4 +1,5 @@
 import puppeteer, { Browser, Page } from 'puppeteer';
+import puppeteerConfig from 'puppeteer.config';
 
 interface Bet9jaResponse {
   D: any; // Replace 'any' with the actual type if you know the structure of 'D'
@@ -10,6 +11,7 @@ export const crawlBet9jaTicket = async (ticketId: string): Promise<any> => {
     headless: true,
     defaultViewport: null,
     args: ['--no-sandbox'],
+    executablePath: puppeteerConfig.executablePath,
   });
 
   const page: Page = await browser.newPage();

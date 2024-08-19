@@ -1,4 +1,5 @@
 import puppeteer, { Browser, Page } from 'puppeteer';
+import puppeteerConfig from 'puppeteer.config';
 
 interface BetwayResponse {
   // Define the structure of the response if known, e.g.:
@@ -16,6 +17,7 @@ export const crawlBetwayTicket = async (
     headless: true,
     defaultViewport: null,
     args: ['--no-sandbox'],
+    executablePath: puppeteerConfig.executablePath,
   });
 
   const page: Page = await browser.newPage();

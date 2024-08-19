@@ -7,6 +7,11 @@ import { crawlBet9jaTicket } from './crawlers/bet9ja';
 import { crawlBetwayTicket } from './crawlers/betway';
 import { crawlBetkingTicket } from './crawlers/betking';
 
+import { crawlBetKingInfo } from './crawlers/staked/betking';
+import { crawlSportyInfo } from './crawlers/staked/sporty';
+import { crawlBet9jaInfo } from './crawlers/staked/bet9ja';
+import crawlBetwayInfo from './crawlers/staked/betway';
+
 @Injectable()
 export class TicketIdService {
   create(createTicketIdDto: CreateTicketIdDto) {
@@ -17,6 +22,49 @@ export class TicketIdService {
     const ticketId = data.ticketId;
     const betPlatform = data.betPlatform;
     let ticketInfo;
+    switch (betPlatform) {
+      case 'sportybet':
+        console.log(betPlatform);
+        ticketInfo = await crawlSportyInfo(ticketId);
+        break;
+
+      case 'bet9ja':
+        console.log(betPlatform);
+        ticketInfo = await crawlBet9jaInfo(ticketId);
+        break;
+
+      case 'betway':
+        console.log(betPlatform);
+        ticketInfo = await crawlBetwayInfo(ticketId);
+        break;
+
+      case 'betking':
+        console.log(betPlatform);
+        ticketInfo = await crawlBetKingInfo(ticketId);
+        break;
+
+      case 'merrybet':
+        console.log(betPlatform);
+        ticketInfo = betPlatform;
+        break;
+
+      case 'wazobet':
+        console.log(betPlatform);
+        ticketInfo = betPlatform;
+        break;
+
+      default:
+        break;
+    }
+
+    return ticketInfo;
+  }
+
+  async bookedTicketInfo(data: GetTicketInfoDto) {
+    const ticketId = data.ticketId;
+    const betPlatform = data.betPlatform;
+    let ticketInfo;
+
     switch (betPlatform) {
       case 'sportybet':
         console.log(betPlatform);

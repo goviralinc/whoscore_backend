@@ -28,6 +28,11 @@ export class TicketIdController {
     return this.ticketIdService.ticketInfo(getTicketInfoDto);
   }
 
+  @Post('get-booked')
+  bookedInfo(@Body() getTicketInfoDto: GetTicketInfoDto) {
+    return this.ticketIdService.bookedTicketInfo(getTicketInfoDto);
+  }
+
   @Get()
   findAll() {
     return this.ticketIdService.findAll();

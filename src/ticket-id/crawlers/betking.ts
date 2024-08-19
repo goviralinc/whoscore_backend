@@ -1,4 +1,5 @@
 import puppeteer, { Browser, Page } from 'puppeteer';
+import puppeteerConfig from 'puppeteer.config';
 
 // Define the structure of the result if needed
 type CrawlerResult = [
@@ -16,6 +17,7 @@ export const crawlBetkingTicket = async (
     headless: true,
     defaultViewport: null,
     args: ['--no-sandbox'],
+    executablePath: puppeteerConfig.executablePath,
   });
   const page: Page = await browser.newPage();
   await page.goto('https://www.betking.com/sports/s');
