@@ -24,17 +24,19 @@ interface BetInfo {
 }
 
 export const crawlSportyInfo = async (betCode: string): Promise<any> => {
+  console.log(1);
   const browser: Browser = await puppeteer.launch({
     headless: true,
     defaultViewport: null,
-    args: ['--no-sandbox'],
-    executablePath: puppeteerConfig.executablePath,
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    //executablePath: puppeteerConfig.executablePath,
   });
+  console.log(2);
   const page: Page = await browser.newPage();
   // Navigate to SportyBet site
   const url: string = 'https://www.sportybet.com/ng/';
   await page.goto(url, { waitUntil: 'networkidle2' });
-
+  console.log(3);
   // Wait for the bet code input field to be available and enter the bet code
   await page.waitForSelector('input.m-input[placeholder="Booking Code"]');
   await page.type('input.m-input[placeholder="Booking Code"]', betCode);
