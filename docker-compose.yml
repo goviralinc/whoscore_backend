@@ -24,6 +24,12 @@ services:
       - db
     volumes:
       - ./src:/app/src
+    platform: linux/amd64
+    privileged: true
+    deploy:
+      resources:
+        limits:
+          memory: 4096M
 
   pgadmin:
     image: dpage/pgadmin4
