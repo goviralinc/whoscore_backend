@@ -23,13 +23,15 @@ interface BetInfo {
   };
 }
 
+console.log(puppeteerConfig.executablePath);
+
 export const crawlSportyInfo = async (betCode: string): Promise<any> => {
   console.log(1);
   const browser: Browser = await puppeteer.launch({
     headless: true,
     defaultViewport: null,
-    args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    //executablePath: puppeteerConfig.executablePath,
+    args: ['--no-sandbox'],
+    executablePath: puppeteerConfig.executablePath,
   });
   console.log(2);
   const page: Page = await browser.newPage();
