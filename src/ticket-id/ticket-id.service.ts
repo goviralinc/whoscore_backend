@@ -11,6 +11,7 @@ import { crawlBetKingInfo } from './crawlers/staked/betking';
 import { crawlSportyInfo } from './crawlers/staked/sporty';
 import { crawlBet9jaInfo } from './crawlers/staked/bet9ja';
 import crawlBetwayInfo from './crawlers/staked/betway';
+import axios from 'axios';
 
 @Injectable()
 export class TicketIdService {
@@ -19,9 +20,21 @@ export class TicketIdService {
   }
 
   async ticketInfo(data: GetTicketInfoDto) {
+    const ticketIdBaseUrl = process.env.TICKET_ID_API_URL;
     const ticketId = data.ticketId;
     const betPlatform = data.betPlatform;
     let ticketInfo;
+    try {
+      console.log("here");
+      const apiUrl = `${ticketIdBaseUrl}/?bet_platform=${betPlatform}&bet_code=${ticketId}`;
+      const response = await axios.get(apiUrl);
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching betslip:', error);
+      throw new Error('Failed to fetch betslip information');
+    }
+    /*
     switch (betPlatform) {
       case 'sportybet':
         console.log(betPlatform);
@@ -56,7 +69,7 @@ export class TicketIdService {
       default:
         break;
     }
-
+    */
     return ticketInfo;
   }
 

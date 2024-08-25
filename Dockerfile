@@ -1,14 +1,10 @@
-FROM ghcr.io/puppeteer/puppeteer:23.1.1
-
-USER root
+FROM node:18
 
 WORKDIR /app
 
 COPY package*.json ./
 
 RUN npm install
-
-#RUN npx puppeteer browsers install chrome
 
 COPY . .
 

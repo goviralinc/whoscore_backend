@@ -19,7 +19,14 @@ interface BetInformation {
 interface BetSlipData {
   bets: Bet[];
   info: BetInformation;
+  errorMessage?: string;
 }
+
+const delay = (time: number) => {
+  return new Promise(function (resolve) {
+    setTimeout(resolve, time);
+  });
+};
 
 const crawlBetwayInfo = async (betCode: string): Promise<BetSlipData> => {
   // Launch Puppeteer browser
@@ -35,13 +42,27 @@ const crawlBetwayInfo = async (betCode: string): Promise<BetSlipData> => {
   await page.setViewport({ width: 1280, height: 800 });
 
   // Navigate to Betway Nigeria
-  await page.goto('https://www.betway.com.ng/');
+  await page.goto('https://www.betway.com.ng/', { waitUntil: 'networkidle2' });
+  console.log(1);
+  // Wait for the page to load completely
+  //await page.waitForTimeout(3000); // Wait a bit for any dynamic content
 
+  // Close the banner if it exists
+  const bannerSelector = 'a[data-dismiss="modal"][toast-cta="close"] img';
+  const closeModalBtn = await page.$(bannerSelector);
+  if (closeModalBtn !== null) {
+    await closeModalBtn.click();
+    //await page.click(bannerSelector);
+    console.log('Banner closed');
+  }
+
+  await page.waitForNetworkIdle();
+  const headerBtnSelector = 'div[data-translate-key="Betslip"]';
   // Wait for the div to be visible
-  await page.waitForSelector('#headerBtnBetslip');
+  const headerBtn = await page.waitForSelector(headerBtnSelector);
 
   // Click on the div
-  await page.click('#headerBtnBetslip');
+  await headerBtn.click();
 
   // Wait for the page to load completely
   await page.waitForSelector('input[placeholder="Booking Code"]');
@@ -51,6 +72,32 @@ const crawlBetwayInfo = async (betCode: string): Promise<BetSlipData> => {
 
   // Click the search button
   await page.click('span[id="searchIconBetslip"]');
+
+  // Explicitly wait for a given timeout to ensure betslip is fully loaded
+  await delay(5000);
+
+  // Check for the presence of an error message
+  const errorSelector = 'span[data-translate-key="CodeIsExpiredOrInvalid"]';
+
+  console.log('here');
+  const errorMessage = await page.$eval(errorSelector, (el) =>
+    el.textContent.trim(),
+  );
+  console.log(errorMessage);
+  if (errorMessage.includes('expired or invalid')) {
+    console.error('Error detected: ' + errorMessage);
+    await browser.close();
+    return {
+      bets: [],
+      info: {
+        totalOdds: '',
+        totalStake: '',
+        potentialWin: '',
+        type: '',
+      },
+      errorMessage: errorMessage,
+    };
+  }
 
   // Wait for the bet slip information to load
   await page.waitForSelector('#betslip-list');

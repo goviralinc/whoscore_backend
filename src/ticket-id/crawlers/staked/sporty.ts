@@ -31,8 +31,8 @@ export const crawlSportyInfo = async (betCode: string): Promise<any> => {
     headless: true,
     slowMo: 25,
     defaultViewport: null,
-    args: ['--start-maximized', '--no-sandbox'],
-    executablePath: '/opt/google/chrome/google-chrome',
+    args: ['--no-sandbox'],
+    executablePath: puppeteerConfig.executablePath,
   });
   console.log(2);
   const page: Page = await browser.newPage();
