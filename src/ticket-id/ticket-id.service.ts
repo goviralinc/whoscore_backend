@@ -25,13 +25,19 @@ export class TicketIdService {
     const betPlatform = data.betPlatform;
     let ticketInfo;
     try {
-      console.log("here");
+      console.log('here');
       const apiUrl = `${ticketIdBaseUrl}/?bet_platform=${betPlatform}&bet_code=${ticketId}`;
       const response = await axios.get(apiUrl);
       console.log(response.data);
       return response.data;
     } catch (error) {
-      console.error('Error fetching betslip:', error);
+      const response = error.response;
+      console.error('Error fetching betslip:', response);
+      if (response.status == 400) {
+        return response.data;
+      } else {
+        return { status: 'error', message: 'Failed to fetch betslip' };
+      }
       throw new Error('Failed to fetch betslip information');
     }
     /*
