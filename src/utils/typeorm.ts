@@ -20,7 +20,7 @@ if (process.env.NODE_ENV == 'production') {
     synchronize: false,
     migrationsRun: true,
     ssl: {
-      ca: fs.readFileSync('src/utils/crt/rds-ca-2019-root.pem').toString(),
+      //ca: fs.readFileSync('src/utils/crt/rds-ca-2019-root.pem').toString(),
     },
     cli: {
       migrationsDir: 'src/migrations',
@@ -36,11 +36,11 @@ if (process.env.NODE_ENV == 'production') {
     password: `${process.env.PGPASSWORD}`,
     database: `${process.env.PGDATABASE}`,
     autoLoadEntities: true,
-    entities: ['dist/**/*.entity{.ts,.js}'],
-    migrations: ['dist/migrations/*{.ts,.js}'],
+    entities: ['dist/src/**/*.entity{.ts,.js}'],
+    migrations: ['dist/src/migrations/*{.ts,.js}'],
     migrationsTableName: 'whoscore_migration_table',
     synchronize: false,
-    migrationsRun: true,
+    migrationsRun: true, 
     cli: {
       migrationsDir: 'src/migrations',
     },

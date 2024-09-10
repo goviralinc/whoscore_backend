@@ -8,9 +8,9 @@ import {
   Delete,
 } from '@nestjs/common';
 import { TicketIdService } from './ticket-id.service';
-import { CreateTicketIdDto } from './dto/create-ticket-id.dto';
-import { UpdateTicketIdDto } from './dto/update-ticket-id.dto';
-import { GetTicketInfoDto } from './dto/ticket-id.dto';
+import { UpdateTicketDto } from './dto/update-ticket.dto';
+import { CreateTicketDto } from './dto/create-ticket.dto';
+import { GetTicketInfoDto } from './dto/ticket.dto';
 import { ApiTags } from '@nestjs/swagger';
 
 @Controller('ticket-id')
@@ -19,8 +19,8 @@ export class TicketIdController {
   constructor(private readonly ticketIdService: TicketIdService) {}
 
   @Post()
-  create(@Body() createTicketIdDto: CreateTicketIdDto) {
-    return this.ticketIdService.create(createTicketIdDto);
+  create(@Body() createTicketDto: CreateTicketDto) {
+    return this.ticketIdService.create(createTicketDto);
   }
 
   @Post('get-info')
@@ -40,19 +40,19 @@ export class TicketIdController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.ticketIdService.findOne(+id);
+    return this.ticketIdService.findOne(id);
   }
 
   @Patch(':id')
   update(
     @Param('id') id: string,
-    @Body() updateTicketIdDto: UpdateTicketIdDto,
+    @Body() updateTicketIdDto: UpdateTicketDto,
   ) {
-    return this.ticketIdService.update(+id, updateTicketIdDto);
+    return this.ticketIdService.update(id, updateTicketIdDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.ticketIdService.remove(+id);
+    return this.ticketIdService.remove(id);
   }
 }
