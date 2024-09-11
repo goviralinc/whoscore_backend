@@ -1,8 +1,15 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 
 import { CreateTicketDto } from './dto/create-ticket.dto';
 import { UpdateTicketDto } from './dto/update-ticket.dto';
 import { GetTicketInfoDto } from './dto/ticket.dto';
+
+import { TicketDataSimplifiedDto } from './dto/ticket-data.dto';
 
 import { crawlSportyTicket } from './crawlers/sporty';
 import { crawlBet9jaTicket } from './crawlers/bet9ja';
@@ -66,7 +73,7 @@ export class TicketIdService {
     return ticket;
   }
 
-  async ticketInfo(data: GetTicketInfoDto) {
+  async ticketInfo(data: GetTicketInfoDto): Promise<TicketDataSimplifiedDto> {
     const ticketIdBaseUrl = process.env.TICKET_ID_API_URL;
     const ticketId = data.ticketId;
     const betPlatform = data.betPlatform;
@@ -118,7 +125,11 @@ export class TicketIdService {
       if (response && response.status === 400) {
         return response.data;
       } else {
-        return { status: 'error', message: 'Failed to fetch betslip' };
+        throw new HttpException(
+          'Failed to fetch betslip',
+          HttpStatus.BAD_REQUEST,
+        );
+        //return { status: 'error', message: 'Failed to fetch betslip' };
       }
     }
   }

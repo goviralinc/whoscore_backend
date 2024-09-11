@@ -6,12 +6,15 @@ import {
   Patch,
   Param,
   Delete,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { TicketIdService } from './ticket-id.service';
 import { UpdateTicketDto } from './dto/update-ticket.dto';
 import { CreateTicketDto } from './dto/create-ticket.dto';
 import { GetTicketInfoDto } from './dto/ticket.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { TicketDataSimplifiedDto } from './dto/ticket-data.dto';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @Controller('ticket-id')
 @ApiTags('Ticket Id')
@@ -24,8 +27,15 @@ export class TicketIdController {
   }
 
   @Post('get-info')
-  ticketInfo(@Body() getTicketInfoDto: GetTicketInfoDto) {
-    return this.ticketIdService.ticketInfo(getTicketInfoDto);
+  @ApiResponse({ type: TicketDataSimplifiedDto })
+  async ticketInfo(
+    @Body() getTicketInfoDto: GetTicketInfoDto,
+  ): Promise<TicketDataSimplifiedDto> {
+    try {
+      return this.ticketIdService.ticketInfo(getTicketInfoDto);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Post('get-booked')
@@ -44,10 +54,7 @@ export class TicketIdController {
   }
 
   @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateTicketIdDto: UpdateTicketDto,
-  ) {
+  update(@Param('id') id: string, @Body() updateTicketIdDto: UpdateTicketDto) {
     return this.ticketIdService.update(id, updateTicketIdDto);
   }
 
