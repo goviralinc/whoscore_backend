@@ -22,7 +22,7 @@ export class TicketMapper {
         hometeam: bet.hometeam,
         awayteam: bet.awayteam,
         odds: bet.odds,
-        bet_status: bet.bet_status || null, // Optional field
+        betStatus: bet.bet_status || null, // Optional field
         scores: bet.scores || null, // Optional field
       };
     });
@@ -54,7 +54,7 @@ export class TicketMapper {
         hometeam: bet.hometeam,
         awayteam: bet.awayteam,
         odds: bet.odds,
-        bet_status: bet.bet_status,
+        bet_status: bet.betStatus,
         scores: bet.scores,
       };
     });

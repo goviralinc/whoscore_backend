@@ -8,19 +8,8 @@ import {
 import { CreateTicketDto } from './dto/create-ticket.dto';
 import { UpdateTicketDto } from './dto/update-ticket.dto';
 import { GetTicketInfoDto } from './dto/ticket.dto';
-
 import { TicketDataSimplifiedDto } from './dto/ticket-data.dto';
-
-import { crawlSportyTicket } from './crawlers/sporty';
-import { crawlBet9jaTicket } from './crawlers/bet9ja';
-import { crawlBetwayTicket } from './crawlers/betway';
-import { crawlBetkingTicket } from './crawlers/betking';
 import { BetPlatform } from 'src/utils/enums';
-
-import { crawlBetKingInfo } from './crawlers/staked/betking';
-import { crawlSportyInfo } from './crawlers/staked/sporty';
-import { crawlBet9jaInfo } from './crawlers/staked/bet9ja';
-import crawlBetwayInfo from './crawlers/staked/betway';
 
 import axios from 'axios';
 import { TicketMapper } from 'src/mapper/ticket.mapper';
@@ -132,50 +121,6 @@ export class TicketIdService {
         //return { status: 'error', message: 'Failed to fetch betslip' };
       }
     }
-  }
-
-  async bookedTicketInfo(data: GetTicketInfoDto) {
-    const ticketId = data.ticketId;
-    const betPlatform = data.betPlatform;
-    let ticketInfo;
-
-    switch (betPlatform) {
-      case 'sportybet':
-        console.log(betPlatform);
-        ticketInfo = await crawlSportyTicket(ticketId);
-        break;
-
-      case 'bet9ja':
-        console.log(betPlatform);
-        ticketInfo = await crawlBet9jaTicket(ticketId);
-        break;
-
-      case 'betking':
-        console.log(betPlatform);
-        ticketInfo = await crawlBetkingTicket(ticketId);
-        break;
-      /**
-      case 'betway':
-        console.log(betPlatform);
-        ticketInfo = await crawlBetwayTicket(ticketId);
-        break;
-  
-      case 'merrybet':
-        console.log(betPlatform);
-        ticketInfo = betPlatform;
-        break;
-
-      case 'wazobet':
-        console.log(betPlatform);
-        ticketInfo = betPlatform;
-        break;
-      */
-
-      default:
-        break;
-    }
-
-    return ticketInfo;
   }
 
   async findAll() {
