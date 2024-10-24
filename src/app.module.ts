@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { LivescoreModule } from './third-party/livescore/livescore.module';
 import { FootballModule } from './football/football.module';
 import { TicketIdModule } from './ticket-id/ticket-id.module';
+import { FootballDataModule } from './third-party/football-data/football-data.module';
 import typeorm from './utils/typeorm';
 
 @Module({
@@ -19,6 +20,7 @@ import typeorm from './utils/typeorm';
     LivescoreModule,
     FootballModule,
     TicketIdModule,
+    FootballDataModule,
   ],
   controllers: [AppController],
   providers: [AppService],

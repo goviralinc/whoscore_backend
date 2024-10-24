@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { LivescoreService } from 'src/third-party/livescore/livescore.service';
+import { FootballDataService } from 'src/third-party/football-data/football-data.service';
 import {
   FixturesRequestDto,
   LivescoresRequestDto,
@@ -37,10 +38,14 @@ export class FootballService {
 
   private logger;
 
-  constructor(private readonly livescoreService: LivescoreService) {
+  constructor(
+    private readonly livescoreService: LivescoreService, 
+    private footballDataService: FootballDataService,
+  ) {
     this.logger = new Logger();
   }
 
+  /**
   @SubscribeMessage('getLiveScores')
   async getLiveScores(
     @MessageBody() data: LivescoresRequestDto,
@@ -53,6 +58,7 @@ export class FootballService {
     return response;
   }
 
+  
   @SubscribeMessage('getFixtures')
   async getFixtures(
     @MessageBody() data: FixturesRequestDto,
@@ -65,47 +71,6 @@ export class FootballService {
     return fixtures;
   }
 
-  @SubscribeMessage('getMatchEvents')
-  async getMatchEvents(
-    @MessageBody() data: MatchEventsRequestDto,
-  ): Promise<MatchEventsResponseDto> {
-    const matchEvents: MatchEventsResponseDto =
-      await this.livescoreService.getMatchEvents(data);
-    this.server.emit('matchEvents', matchEvents);
-    return matchEvents;
-  }
-
-  @SubscribeMessage('getMatchStats')
-  async getMatchStats(
-    @MessageBody() data: MatchStatsRequestDto,
-  ): Promise<MatchStatsResponseDto> {
-    const matchStats: MatchStatsResponseDto =
-      await this.livescoreService.getMatchStats(data);
-    this.server.emit('matchStats', matchStats);
-    return matchStats;
-  }
-
-  @SubscribeMessage('getMatchLineUps')
-  async getMatchLineUps(
-    @MessageBody() data: MatchLineupsRequestDto,
-  ): Promise<MatchLineupResponseDto> {
-    const response = await this.livescoreService.getMatchLineups(data);
-    const matchLineUps: MatchLineupResponseDto = response.lineup;
-    this.server.emit('matchLineUps', matchLineUps);
-    return matchLineUps;
-  }
-
-  @SubscribeMessage('getCountries')
-  async getCountries(
-    @MessageBody() data: CountriesRequestDto,
-  ): Promise<CountryResponseDto> {
-    const countries: CountryResponseDto = {
-      countries: await this.livescoreService.getCountries(data),
-    };
-    this.server.emit('countries', countries);
-    return countries;
-  }
-
   @SubscribeMessage('getCompetitions')
   async getCompetitions(
     @MessageBody() data: CompetitionsRequestDto,
@@ -116,13 +81,23 @@ export class FootballService {
     this.server.emit('competitions', competitions);
     return competitions;
   }
+  */
 
-  @SubscribeMessage('getFederations')
-  async getFederations(): Promise<FederationsResponseDto> {
-    const federations: FederationsResponseDto = {
-      federations: await this.livescoreService.getFederations(),
-    };
-    this.server.emit('federations', federations);
-    return federations;
+  async getCompetitions() {
+    const competitions = await this.footballDataService.getCompetitions();
+
+    return competitions;
   }
+
+  async getFixtures(competition, date) {
+    const fixtures = await this.footballDataService.getFixtures(competition, date);
+
+    return fixtures;
+  }
+
+  async getLivescores(competition) {
+    const livescores = await this.footballDataService.getLiveScores(competition);
+    return livescores;
+  }
+
 }

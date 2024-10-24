@@ -8,6 +8,7 @@ import {
   HttpStatus,
   HttpException,
   Body,
+  Query,
 } from '@nestjs/common';
 import { FootballService } from './football.service';
 import {
@@ -27,113 +28,56 @@ import {
   CountryResponseDto,
   FederationsResponseDto,
 } from './dto/football.dto';
-import { ApiTags, ApiOkResponse } from '@nestjs/swagger';
+import { CompetitionDto } from './dto/competition.dto';
+import { FixtureMatchDto } from './dto/fixture.dto';
+import { MatchDto } from './dto/match.dto';
+import { ApiTags, ApiOkResponse, ApiParam, ApiResponse, ApiOperation, ApiQuery } from '@nestjs/swagger';
 
 @Controller('football')
 @ApiTags('football')
 export class FootballController {
   constructor(private readonly footballService: FootballService) {}
 
-  @Post('livescores')
-  @HttpCode(HttpStatus.OK)
-  @ApiOkResponse({ type: LivescoreResponseDto })
-  async getLiveScores(
-    @Body() data: LivescoresRequestDto,
-  ): Promise<LivescoreResponseDto> {
-    try {
-      return await this.footballService.getLiveScores(data);
-    } catch (error) {
-      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-    }
+  @Get('competitions')
+  @ApiOperation({ summary: 'Retrieve a list of football competitions' })
+  @ApiResponse({
+    status: 200,
+    description: 'List of competitions retrieved successfully',
+    type: [CompetitionDto],
+  })
+  async getCompetitions(): Promise<CompetitionDto[]> {
+    const competitions = await this.footballService.getCompetitions();
+    
+    // Assuming that getCompetitions already returns an array of CompetitionDto
+    return competitions;
   }
 
-  @Post('fixtures')
-  @HttpCode(HttpStatus.OK)
-  @ApiOkResponse({ type: FixturesResponseDto })
-  async getFixtures(
-    @Body() data: FixturesRequestDto,
-  ): Promise<FixturesResponseDto> {
-    try {
-      return await this.footballService.getFixtures(data);
-    } catch (error) {
-      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-    }
+  @Get('fixtures')
+  @ApiOperation({ summary: 'Retrieve a list of football fixtures' })
+  @ApiResponse({
+    status: 200,
+    description: 'List of fixtures retrieved successfully',
+    type: [FixtureMatchDto],
+  })
+  @ApiQuery({ name: 'competition', required: true, description: 'Competition code (e.g., PL for Premier League)' })
+  @ApiQuery({ name: 'date', required: false, description: 'Optional date filter in YYYY-MM-DD format' })
+  async getFixtures(@Query('competition') competition: string, @Query('date') date?: string): Promise<FixtureMatchDto[]> {
+    const fixtures = await this.footballService.getFixtures(competition, date);
+
+    return fixtures;
   }
 
-  @Post('match-events')
-  @HttpCode(HttpStatus.OK)
-  @ApiOkResponse({ type: MatchEventsResponseDto })
-  async getMatchEvents(
-    @Body() data: MatchEventsRequestDto,
-  ): Promise<MatchEventsResponseDto> {
-    try {
-      return await this.footballService.getMatchEvents(data);
-    } catch (error) {
-      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-    }
-  }
+  @Get('livescores')
+  @ApiOperation({ summary: 'Retrieve a list of football livescores' })
+  @ApiResponse({
+    status: 200,
+    description: 'List of livescores retrieved successfully',
+    type: [FixtureMatchDto],
+  })
+  @ApiQuery({ name: 'competition', required: true, description: 'Competition code (e.g., PL for Premier League)' })
+  async getLiveScores(@Query('competition') competition: string): Promise<MatchDto[]> {
+    const livescores = await this.footballService.getLivescores(competition);
 
-  @Post('match-stats')
-  @HttpCode(HttpStatus.OK)
-  @ApiOkResponse({ type: MatchStatsResponseDto })
-  async getMatchStats(
-    @Body() data: MatchStatsRequestDto,
-  ): Promise<MatchStatsResponseDto> {
-    try {
-      return await this.footballService.getMatchStats(data);
-    } catch (error) {
-      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-    }
-  }
-
-  @Post('match-lineups')
-  @HttpCode(HttpStatus.OK)
-  @ApiOkResponse({ type: MatchLineupResponseDto })
-  async getMatchLineUps(
-    @Body() data: MatchLineupsRequestDto,
-  ): Promise<MatchLineupResponseDto> {
-    try {
-      return await this.footballService.getMatchLineUps(data);
-    } catch (error) {
-      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-    }
-  }
-
-  @Post('competitions')
-  @HttpCode(HttpStatus.OK)
-  @ApiOkResponse({ type: CompetitionsResponseDto })
-  async getCompetitions(
-    @Body() data: CompetitionsRequestDto,
-  ): Promise<CompetitionsResponseDto> {
-    try {
-      return await this.footballService.getCompetitions(data);
-    } catch (error) {
-      console.log(error);
-      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-    }
-  }
-
-  @Post('countries')
-  @HttpCode(HttpStatus.OK)
-  @ApiOkResponse({ type: CountryResponseDto })
-  async getCountries(
-    @Body() data: CountriesRequestDto,
-  ): Promise<CountryResponseDto> {
-    try {
-      return await this.footballService.getCountries(data);
-    } catch (error) {
-      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-    }
-  }
-
-  @Get('federations')
-  @HttpCode(HttpStatus.OK)
-  @ApiOkResponse({ type: FederationsResponseDto })
-  async getFederations(): Promise<FederationsResponseDto> {
-    try {
-      return await this.footballService.getFederations();
-    } catch (error) {
-      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-    }
+    return livescores;
   }
 }
