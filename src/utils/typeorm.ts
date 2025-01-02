@@ -40,7 +40,7 @@ if (process.env.NODE_ENV == 'production') {
     migrations: ['dist/src/migrations/*{.ts,.js}'],
     migrationsTableName: 'whoscore_migration_table',
     synchronize: false,
-    migrationsRun: true, 
+    migrationsRun: true,
     cli: {
       migrationsDir: 'src/migrations',
     },

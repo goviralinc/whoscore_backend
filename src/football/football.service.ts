@@ -39,7 +39,7 @@ export class FootballService {
   private logger;
 
   constructor(
-    private readonly livescoreService: LivescoreService, 
+    private readonly livescoreService: LivescoreService,
     private footballDataService: FootballDataService,
   ) {
     this.logger = new Logger();
@@ -90,14 +90,17 @@ export class FootballService {
   }
 
   async getFixtures(competition, date) {
-    const fixtures = await this.footballDataService.getFixtures(competition, date);
+    const fixtures = await this.footballDataService.getFixtures(
+      competition,
+      date,
+    );
 
     return fixtures;
   }
 
   async getLivescores(competition) {
-    const livescores = await this.footballDataService.getLiveScores(competition);
+    const livescores =
+      await this.footballDataService.getLiveScores(competition);
     return livescores;
   }
-
 }

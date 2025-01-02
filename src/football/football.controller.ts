@@ -31,7 +31,14 @@ import {
 import { CompetitionDto } from './dto/competition.dto';
 import { FixtureMatchDto } from './dto/fixture.dto';
 import { MatchDto } from './dto/match.dto';
-import { ApiTags, ApiOkResponse, ApiParam, ApiResponse, ApiOperation, ApiQuery } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOkResponse,
+  ApiParam,
+  ApiResponse,
+  ApiOperation,
+  ApiQuery,
+} from '@nestjs/swagger';
 
 @Controller('football')
 @ApiTags('football')
@@ -47,7 +54,7 @@ export class FootballController {
   })
   async getCompetitions(): Promise<CompetitionDto[]> {
     const competitions = await this.footballService.getCompetitions();
-    
+
     // Assuming that getCompetitions already returns an array of CompetitionDto
     return competitions;
   }
@@ -59,9 +66,20 @@ export class FootballController {
     description: 'List of fixtures retrieved successfully',
     type: [FixtureMatchDto],
   })
-  @ApiQuery({ name: 'competition', required: true, description: 'Competition code (e.g., PL for Premier League)' })
-  @ApiQuery({ name: 'date', required: false, description: 'Optional date filter in YYYY-MM-DD format' })
-  async getFixtures(@Query('competition') competition: string, @Query('date') date?: string): Promise<FixtureMatchDto[]> {
+  @ApiQuery({
+    name: 'competition',
+    required: true,
+    description: 'Competition code (e.g., PL for Premier League)',
+  })
+  @ApiQuery({
+    name: 'date',
+    required: false,
+    description: 'Optional date filter in YYYY-MM-DD format',
+  })
+  async getFixtures(
+    @Query('competition') competition: string,
+    @Query('date') date?: string,
+  ): Promise<FixtureMatchDto[]> {
     const fixtures = await this.footballService.getFixtures(competition, date);
 
     return fixtures;
@@ -74,8 +92,14 @@ export class FootballController {
     description: 'List of livescores retrieved successfully',
     type: [FixtureMatchDto],
   })
-  @ApiQuery({ name: 'competition', required: true, description: 'Competition code (e.g., PL for Premier League)' })
-  async getLiveScores(@Query('competition') competition: string): Promise<MatchDto[]> {
+  @ApiQuery({
+    name: 'competition',
+    required: true,
+    description: 'Competition code (e.g., PL for Premier League)',
+  })
+  async getLiveScores(
+    @Query('competition') competition: string,
+  ): Promise<MatchDto[]> {
     const livescores = await this.footballService.getLivescores(competition);
 
     return livescores;

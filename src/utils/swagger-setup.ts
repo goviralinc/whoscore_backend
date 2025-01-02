@@ -10,7 +10,7 @@ export class SwaggerSetup {
     const options = new DocumentBuilder()
       .setTitle('Whoscore documentation')
       .setDescription('Whoscore documentation')
-      .addServer('http://localhost:3000', 'Local Server') // You can add multiple servers
+      .addServer('http://localhost:3001', 'Local Server') // You can add multiple servers
       .addServer('https://whoscore-backend-h8y0.onrender.com', 'Dev Server') // You can add multiple servers
       .addServer('https://devapi.whoscore.uk', 'Staging Server') // Set the addServer value
       .addBearerAuth()
