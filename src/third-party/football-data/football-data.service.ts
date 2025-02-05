@@ -49,6 +49,13 @@ export class FootballDataService {
     return competitions;
   }
 
+  async getCompetitionStandings(id: number) {
+    const competionStandingUrl = `competitions/${id}/standings`;
+    const response = await this.sendRequest(competionStandingUrl);
+
+    return response;
+  }
+
   async getLiveScores(competition: string) {
     let matchesUrl = `matches?status=IN_PLAY`;
 
@@ -69,6 +76,50 @@ export class FootballDataService {
 
     const liveMatches = await this.matchMapper.mapToDtoArray(matches);
     return liveMatches;
+  }
+
+  async getMatchH2h(
+    matchId,
+    limit: number = null,
+    competitions: number[] = null,
+  ) {
+    let matchUrl = `matches/${matchId}/head2head?`;
+
+    if (competitions) {
+      matchUrl += `&competitions=${competitions}`;
+    }
+
+    if (limit) {
+      matchUrl += `&limit=${limit}`;
+    }
+
+    console.log(matchUrl);
+
+    const response = await this.sendRequest(matchUrl);
+    return response;
+  }
+
+  async getMatches(competitions: string[], date?, status?) {
+    let matchesUrl = `matches/?`;
+    const daysAfter = 7;
+    let providedDate;
+
+    status ? (matchesUrl += `status=${status}&`) : console.log('');
+    date ? (providedDate = new Date(date)) : (providedDate = new Date());
+
+    const dateFrom = providedDate.toISOString().split('T')[0]; // YYYY-MM-DD format
+
+    const endOfDay = new Date();
+    endOfDay.setDate(providedDate.getDate() + daysAfter); // Add the number of days after today
+    const dateTo = endOfDay.toISOString().split('T')[0]; // Date at the end of the specified day (YYYY-MM-DD)
+
+    matchesUrl += `competitions=${competitions}&dateFrom=${dateFrom}&dateTo=${dateTo}`;
+
+    const response = await this.sendRequest(matchesUrl);
+
+    console.log(response);
+
+    return response;
   }
 
   async getFixtures(competition: string, date: string) {
@@ -97,5 +148,12 @@ export class FootballDataService {
     const fixtures = this.fixtureMapper.mapToDtoArray(matches);
 
     return fixtures;
+  }
+
+  async getMatchdetail(matchId) {
+    const matchUrl = `matches/${matchId}`;
+
+    const response = await this.sendRequest(matchUrl);
+    return response;
   }
 }

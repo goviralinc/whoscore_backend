@@ -3,7 +3,6 @@ import { ApiProperty } from '@nestjs/swagger';
 import { TeamDto } from './team.dto';
 import { CompetitionDto } from './competition.dto';
 
-
 export class MatchDto {
   @ApiProperty()
   @IsNumber()

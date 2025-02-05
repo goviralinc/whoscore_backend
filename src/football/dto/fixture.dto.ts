@@ -1,8 +1,8 @@
-import { IsString, IsNumber, IsOptional } from 'class-validator';
+import { IsString, IsNumber } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { TeamDto } from './team.dto';
 import { CompetitionDto } from './competition.dto';
-
+import { ScoreDto } from './score.dto';
 
 export class FixtureMatchDto {
   @ApiProperty()
@@ -10,7 +10,7 @@ export class FixtureMatchDto {
   id: number;
 
   @ApiProperty({
-    type: CompetitionDto
+    type: CompetitionDto,
   })
   competition: CompetitionDto;
 
@@ -36,4 +36,9 @@ export class FixtureMatchDto {
   })
   @IsString()
   date: string;
+
+  @ApiProperty({
+    type: ScoreDto,
+  })
+  score: ScoreDto;
 }
